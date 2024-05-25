@@ -1,0 +1,3 @@
+
+# Optionally ignore environment files if not needed in the Docker image
+.env
