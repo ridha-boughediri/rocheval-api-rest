@@ -125,10 +125,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Local SQL Server files
-*.mdf
-*.ldf
-*.ndf
-
 # Environment variables
 .env
