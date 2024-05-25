@@ -2,17 +2,16 @@ version: '3.3'
 
 services:
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    build: .
     container_name: sqlserver
     ports:
       - "1433:1433"
     environment:
-      SA_PASSWORD: "root"
+      SA_PASSWORD: "${SA_PASSWORD}"
       ACCEPT_EULA: "Y"
     volumes:
       - sqlserver_data:/var/opt/mssql
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
-    command: /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P root -i /docker-entrypoint-initdb.d/init-db.sql
 
   adminer:
     image: adminer

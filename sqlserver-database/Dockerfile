@@ -1,17 +1,12 @@
-# Use the .NET SDK image to build the project files.
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
-WORKDIR /app
+FROM mcr.microsoft.com/mssql/server:2019-latest
 
-# Copy the C# project file and restore dependencies.
-COPY ["Api-rest-eau.csproj", "./"]
-RUN dotnet restore "Api-rest-eau.csproj"
+# Set environment variables
+ENV ACCEPT_EULA=Y
 
-# Copy the rest of the application's source code and build the project.
-COPY . ./
-RUN dotnet publish -c Release -o out
+# Copy initialization script
+COPY init-db.sql /docker-entrypoint-initdb.d/
 
-# Use the .NET runtime image to run the application.
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
-WORKDIR /app
-COPY --from=build-env /app/out .
-ENTRYPOINT ["dotnet", "Api-rest-eau.dll"]
+USER mssql
+
+# Run SQL Server process
+CMD /opt/mssql/bin/sqlservr
