@@ -7,4 +7,7 @@ namespace api_worker.Modeles
         public string Position { get; set; }
         public decimal Salary { get; set; }
     }
+
+
+ 
 }

@@ -67,11 +67,18 @@ L'API est documentée et testable via Swagger. Une fois l'application lancée, a
 - **PUT /api/Projects/{id}** : Met à jour un projet existant.
 - **DELETE /api/Projects/{id}** : Supprime un projet.
 
+## Points de terminaison disponibles
+
+...
+
 #### Affectations (Assignments)
-- **GET /api/Assignments** : Récupère toutes les affectations.
-- **GET /api/Assignments/{employeeId}/{projectId}** : Récupère une affectation par ID d'employé et ID de projet.
-- **POST /api/Assignments** : Crée une nouvelle affectation.
-- **DELETE /api/Assignments/{employeeId}/{projectId}** : Supprime une affectation.
+- **GET /api/assignments** : Récupère toutes les affectations.
+- **GET /api/assignments/{workerId}/{projectId}** : Récupère une affectation par ID de travailleur et ID de projet.
+- **POST /api/assignments** : Crée une nouvelle affectation.
+- **DELETE /api/assignments/{workerId}/{projectId}** : Supprime une affectation.
+
+...
+
 
 #### Prévisions météorologiques
 - **GET /weatherforecast** : Récupère les prévisions météorologiques.
