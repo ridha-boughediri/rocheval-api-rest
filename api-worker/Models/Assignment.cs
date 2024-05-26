@@ -1,5 +1,3 @@
-using System;
-
 namespace api_worker.Modeles
 {
     public class Assignment

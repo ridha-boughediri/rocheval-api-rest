@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using api_worker.Modeles;
+using System.Linq;
 
 namespace api_worker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProjectsController : ControllerBase
     {
         private static List<Project> projects = new List<Project>
@@ -21,7 +24,7 @@ namespace api_worker.Controllers
             return projects;
         }
 
-        // GET: api/projects/1
+        // GET: api/projects/{id}
         [HttpGet("{id}")]
         public ActionResult<Project> Get(int id)
         {
@@ -41,7 +44,7 @@ namespace api_worker.Controllers
             return CreatedAtAction(nameof(Get), new { id = project.Id }, project);
         }
 
-        // PUT: api/projects/1
+        // PUT: api/projects/{id}
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Project updatedProject)
         {
@@ -57,7 +60,7 @@ namespace api_worker.Controllers
             return NoContent();
         }
 
-        // DELETE: api/projects/1
+        // DELETE: api/projects/{id}
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  mailerservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - Email__SmtpServer=smtp.example.com
+      - Email__Port=587
+      - Email__Username=your-email@example.com
+      - Email__Password=your-email-password

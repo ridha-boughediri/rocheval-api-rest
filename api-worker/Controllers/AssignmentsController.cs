@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using api_worker.Modeles;
 using System.Linq;
@@ -7,6 +8,7 @@ namespace api_worker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AssignmentsController : ControllerBase
     {
         private static List<Assignment> assignments = new List<Assignment>
@@ -38,12 +40,6 @@ namespace api_worker.Controllers
         [HttpPost]
         public ActionResult<Assignment> Post([FromBody] Assignment assignment)
         {
-            var existingAssignment = assignments.Find(a => a.WorkerId == assignment.WorkerId && a.ProjectId == assignment.ProjectId);
-            if (existingAssignment != null)
-            {
-                return Conflict("Assignment already exists.");
-            }
-
             assignments.Add(assignment);
             return CreatedAtAction(nameof(Get), new { workerId = assignment.WorkerId, projectId = assignment.ProjectId }, assignment);
         }

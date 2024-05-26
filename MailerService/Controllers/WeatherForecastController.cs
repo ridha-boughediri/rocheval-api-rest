@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace api_worker.Controllers;
+namespace MailerService.Controllers;
 
 [ApiController]
 [Route("[controller]")]

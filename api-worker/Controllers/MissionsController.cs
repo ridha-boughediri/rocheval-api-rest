@@ -1,69 +1,75 @@
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using api_worker.Modeles;
+using System.Linq;
 
 namespace api_worker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MissionsController : ControllerBase
     {
-        private static List<Mission> Missions = new List<Mission>
+        private static List<Mission> missions = new List<Mission>
         {
-            new Mission { Id = 1, Title = "Mission 1", Description = "Description 1", DueDate = DateTime.Now.AddDays(1), IsCompleted = false },
-            new Mission { Id = 2, Title = "Mission 2", Description = "Description 2", DueDate = DateTime.Now.AddDays(2), IsCompleted = false }
+            new Mission { Id = 1, Name = "Mission A", Description = "Description of Mission A", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(6) },
+            new Mission { Id = 2, Name = "Mission B", Description = "Description of Mission B", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(12) }
         };
 
+        // GET: api/missions
         [HttpGet]
         public ActionResult<IEnumerable<Mission>> Get()
         {
-            return Missions;
+            return missions;
         }
 
+        // GET: api/missions/{id}
         [HttpGet("{id}")]
         public ActionResult<Mission> Get(int id)
         {
-            var Mission = Missions.Find(t => t.Id == id);
-            if (Mission == null)
+            var mission = missions.Find(m => m.Id == id);
+            if (mission == null)
             {
                 return NotFound();
             }
-            return Mission;
+            return mission;
         }
 
+        // POST: api/missions
         [HttpPost]
-        public ActionResult<Mission> Post([FromBody] Mission Mission)
+        public ActionResult<Mission> Post([FromBody] Mission mission)
         {
-            Mission.Id = Missions.Count > 0 ? Missions[^1].Id + 1 : 1;
-            Missions.Add(Mission);
-            return CreatedAtAction(nameof(Get), new { id = Mission.Id }, Mission);
+            missions.Add(mission);
+            return CreatedAtAction(nameof(Get), new { id = mission.Id }, mission);
         }
 
+        // PUT: api/missions/{id}
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Mission updatedMission)
         {
-            var Mission = Missions.Find(t => t.Id == id);
-            if (Mission == null)
+            var mission = missions.Find(m => m.Id == id);
+            if (mission == null)
             {
                 return NotFound();
             }
-            Mission.Title = updatedMission.Title;
-            Mission.Description = updatedMission.Description;
-            Mission.DueDate = updatedMission.DueDate;
-            Mission.IsCompleted = updatedMission.IsCompleted;
+            mission.Name = updatedMission.Name;
+            mission.Description = updatedMission.Description;
+            mission.StartDate = updatedMission.StartDate;
+            mission.EndDate = updatedMission.EndDate;
             return NoContent();
         }
 
+        // DELETE: api/missions/{id}
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var Mission = Missions.Find(t => t.Id == id);
-            if (Mission == null)
+            var mission = missions.Find(m => m.Id == id);
+            if (mission == null)
             {
                 return NotFound();
             }
-            Missions.Remove(Mission);
+            missions.Remove(mission);
             return NoContent();
         }
     }

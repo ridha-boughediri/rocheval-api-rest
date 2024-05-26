@@ -1,70 +1,73 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using api_worker.Modeles;
+using System.Linq;
 
 namespace api_worker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DepartementsController : ControllerBase
     {
-        private static List<Departement> Departements = new List<Departement>
+        private static List<Departement> departements = new List<Departement>
         {
-            new Departement { Id = 1, Name = "Engineering", Location = "Building A" },
-            new Departement { Id = 2, Name = "Marketing", Location = "Building B" }
+            new Departement { Id = 1, Nom = "Ingénierie", Emplacement = "Bâtiment A" },
+            new Departement { Id = 2, Nom = "Marketing", Emplacement = "Bâtiment B" }
         };
 
-        // GET: api/Departements
+        // GET: api/departements
         [HttpGet]
         public ActionResult<IEnumerable<Departement>> Get()
         {
-            return Departements;
+            return departements;
         }
 
-        // GET: api/Departements/1
+        // GET: api/departements/{id}
         [HttpGet("{id}")]
         public ActionResult<Departement> Get(int id)
         {
-            var Departement = Departements.Find(d => d.Id == id);
-            if (Departement == null)
+            var departement = departements.Find(d => d.Id == id);
+            if (departement == null)
             {
                 return NotFound();
             }
-            return Departement;
+            return departement;
         }
 
-        // POST: api/Departements
+        // POST: api/departements
         [HttpPost]
-        public ActionResult<Departement> Post([FromBody] Departement Departement)
+        public ActionResult<Departement> Post([FromBody] Departement departement)
         {
-            Departements.Add(Departement);
-            return CreatedAtAction(nameof(Get), new { id = Departement.Id }, Departement);
+            departements.Add(departement);
+            return CreatedAtAction(nameof(Get), new { id = departement.Id }, departement);
         }
 
-        // PUT: api/Departements/1
+        // PUT: api/departements/{id}
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Departement updatedDepartement)
         {
-            var Departement = Departements.Find(d => d.Id == id);
-            if (Departement == null)
+            var departement = departements.Find(d => d.Id == id);
+            if (departement == null)
             {
                 return NotFound();
             }
-            Departement.Name = updatedDepartement.Name;
-            Departement.Location = updatedDepartement.Location;
+            departement.Nom = updatedDepartement.Nom;
+            departement.Emplacement = updatedDepartement.Emplacement;
             return NoContent();
         }
 
-        // DELETE: api/Departements/1
+        // DELETE: api/departements/{id}
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var Departement = Departements.Find(d => d.Id == id);
-            if (Departement == null)
+            var departement = departements.Find(d => d.Id == id);
+            if (departement == null)
             {
                 return NotFound();
             }
-            Departements.Remove(Departement);
+            departements.Remove(departement);
             return NoContent();
         }
     }
