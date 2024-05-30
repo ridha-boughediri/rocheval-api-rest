@@ -26,7 +26,7 @@ Chaque service doit être configuré conformément à ses exigences spécifiques
    cd [NOM_DU_REPO]
 1. **Construire et démarrer tous les services :**
    ```bash
-docker-compose up --build -d
+   docker-compose up --build -d
 
 Cette commande va construire et lancer tous les containers définis dans votre fichier docker-compose.yml.
 
