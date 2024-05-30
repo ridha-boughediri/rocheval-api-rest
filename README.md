@@ -1,128 +1,43 @@
+# Ensemble de Microservices Rocheval
 
-# SQL Server with Docker and Adminer
+## Introduction
+Cet ensemble de microservices fournit une architecture robuste pour le développement d'applications avec des services spécialisés tels que l'authentification, la gestion des mails, le traitement par des workers et le stockage des données.
 
-This repository contains a Docker setup to run SQL Server 2019 and Adminer, a database management tool. The SQL Server instance is initialized with a custom script to set up the database and its schema.
+## Composants
+Les composants de l'ensemble incluent :
+- **api-worker**: Service de backend destiné à traiter les tâches en arrière-plan.
+- **Auth-Api**: Interface API pour les services d'authentification.
+- **Auth-JWT**: Service pour la génération et la validation des tokens JWT.
+- **MailerService**: Service de gestion des envois d'emails.
+- **sqlserver-database**: Base de données Microsoft SQL Server configurée pour être utilisée avec Docker.
 
-## Prerequisites
+## Prérequis
+- .NET Core pour l'exécution des solutions .NET.
+- Docker et Docker Compose pour la gestion des conteneurs.
+- Un client SQL pour accéder à SQL Server.
 
-- Docker
-- Docker Compose
+## Configuration
+Chaque service doit être configuré conformément à ses exigences spécifiques. Les informations de configuration peuvent être trouvées dans les fichiers de configuration individuels ou les variables d'environnement pour chaque service.
 
-## Getting Started
+## Démarrage rapide
+1. **Cloner le dépôt** :
+   ```bash
+   git clone [URL_DU_DEPOT]
+   cd [NOM_DU_REPO]
+1. **Construire et démarrer tous les services :**
+   ```bash
+docker-compose up --build -d
 
-### Environment Variables
+Cette commande va construire et lancer tous les containers définis dans votre fichier docker-compose.yml.
 
-Create a `.env` file in the root of the project to specify the environment variables:
 
-```env
-SA_PASSWORD=root
-DB_NAME=rocheval
-```
 
-### Docker Compose
+Utilisation
+Vous pouvez accéder aux services via les ports configurés sur votre machine locale :
 
-The `docker-compose.yml` file defines the services for SQL Server and Adminer.
+api-worker : Port spécifié dans le docker-compose ou la configuration du service.
+Auth-Api : Port spécifié pour accéder aux endpoints d'authentification.
+Auth-JWT : Port utilisé pour les requêtes de validation de tokens.
+MailerService : Port configuré pour envoyer des emails.
+SQL Server : Connectez-vous via le port 1455 avec les identifiants configurés.
 
-```yaml
-version: '3.3'
-
-services:
-  sqlserver:
-    build: .
-    container_name: sqlserver
-    ports:
-      - "1433:1433"
-    environment:
-      SA_PASSWORD: "${SA_PASSWORD}"
-      ACCEPT_EULA: "Y"
-    volumes:
-      - sqlserver_data:/var/opt/mssql
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
-
-  adminer:
-    image: adminer
-    container_name: adminer
-    ports:
-      - "8083:8080"
-    environment:
-      ADMINER_DEFAULT_SERVER: sqlserver
-
-volumes:
-  sqlserver_data:
-```
-
-### Dockerfile
-
-The `Dockerfile` is used to build a custom Docker image for SQL Server.
-
-```Dockerfile
-FROM mcr.microsoft.com/mssql/server:2019-latest
-
-# Set environment variables
-ENV ACCEPT_EULA=Y
-
-# Copy initialization script
-COPY init-db.sql /docker-entrypoint-initdb.d/
-
-USER mssql
-
-# Run SQL Server process
-CMD /opt/mssql/bin/sqlservr
-```
-
-### Initialization Script
-
-The `init-db.sql` script is used to initialize the database and set up the schema.
-
-```sql
-CREATE DATABASE ${DB_NAME};
-GO
-
-USE ${DB_NAME};
-GO
-
-CREATE TABLE Users (
-    Id INT PRIMARY KEY IDENTITY,
-    FirstName NVARCHAR(100),
-    LastName NVARCHAR(100),
-    Email NVARCHAR(100) UNIQUE,
-    Password NVARCHAR(100)
-);
-GO
-```
-
-### Building and Running the Containers
-
-To build and run the containers, execute the following commands:
-
-```sh
-docker-compose down
-docker-compose build
-docker-compose up -d
-```
-
-### Accessing Adminer
-
-Adminer can be accessed in your web browser at `http://localhost:8083`. Use the following credentials to connect:
-
-- **System:** MS SQL
-- **Server:** sqlserver
-- **Username:** sa
-- **Password:** (as specified in your `.env` file)
-- **Database:** (leave empty to see the list of databases)
-
-### Logs and Troubleshooting
-
-To view the logs for the SQL Server container, use the following command:
-
-```sh
-docker logs sqlserver
-```
-
-### Stopping the Containers
-
-To stop the running containers, use:
-
-```sh
-docker-compose down
-```
